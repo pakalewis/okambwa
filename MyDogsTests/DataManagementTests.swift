@@ -4,8 +4,6 @@ import XCTest
 class DataManagementTests: XCTestCase {
     let dataStore = DataManagement.shared
     
-    let snowy = Mocks.Snowy
-
     override func setUp() {
         super.setUp()
         dataStore.deleteAll()
@@ -17,27 +15,33 @@ class DataManagementTests: XCTestCase {
     }
     
     func testAllDogs() {
-        XCTAssertEqual(dataStore.allDogsCount(), 0)
-        XCTAssertEqual(dataStore.allDogs()?.count, 0)
-
-        let count = 100
-        for _ in 1...count {
+        XCTAssertEqual(dataStore.allDogsCount(type: .all), 0)
+        XCTAssertEqual(dataStore.allDogsCount(type: .real), 0)
+        XCTAssertEqual(dataStore.allDogsCount(type: .sample), 0)
+        
+        let real_count = 100
+        for _ in 1...real_count {
             let _ = dataStore.saveDog(model: DogModel())
         }
-        XCTAssertEqual(dataStore.allDogsCount(), count)
-        XCTAssertNotNil(dataStore.allDogs())
+        XCTAssertEqual(dataStore.allDogsCount(type: .all), real_count)
+        XCTAssertEqual(dataStore.allDogsCount(type: .real), real_count)
+        XCTAssertEqual(dataStore.allDogsCount(type: .sample), 0)
+
 
         let sample_count = 10
         for _ in 1...sample_count {
             let _ = dataStore.saveDog(model: DogModel(sample: true))
         }
-        XCTAssertEqual(dataStore.allDogsCount(), count)
-        XCTAssertEqual(dataStore.allDogsCount(excludeSample: false), count + sample_count)
+        XCTAssertEqual(dataStore.allDogsCount(type: .all), real_count + sample_count)
+        XCTAssertEqual(dataStore.allDogsCount(type: .real), real_count)
+        XCTAssertEqual(dataStore.allDogsCount(type: .sample), sample_count)
     }
     
     
     func testSave() {
-        XCTAssertEqual(dataStore.allDogsCount(), 0)
+        let snowy = Mocks.Snowy
+        
+        XCTAssertEqual(dataStore.allDogsCount(type: .all), 0)
         
         let dog = dataStore.saveDog(model: snowy)!
         XCTAssertNotNil(dog)
@@ -46,8 +50,10 @@ class DataManagementTests: XCTestCase {
         XCTAssertEqual(dog.blurb, Mocks.Snowy.blurb)
         XCTAssertNotEqual(dog.uuid, "")
         XCTAssertTrue(dog.sample)
-        XCTAssertEqual(dataStore.allDogsCount(), 1)
-        
+        XCTAssertEqual(dataStore.allDogsCount(type: .all), 1)
+        XCTAssertEqual(dataStore.allDogsCount(type: .real), 0)
+        XCTAssertEqual(dataStore.allDogsCount(type: .sample), 1)
+
         snowy.blurb = "New blurb"
         let updatedDog = dataStore.saveDog(model: snowy)!
         XCTAssertNotNil(updatedDog)
@@ -56,8 +62,10 @@ class DataManagementTests: XCTestCase {
         XCTAssertEqual(updatedDog.owner, Mocks.Snowy.owner)
         XCTAssertEqual(updatedDog.blurb, "New blurb")
         XCTAssertTrue(updatedDog.sample)
-        XCTAssertEqual(dataStore.allDogsCount(), 1)
-        
+        XCTAssertEqual(dataStore.allDogsCount(type: .all), 1)
+        XCTAssertEqual(dataStore.allDogsCount(type: .real), 0)
+        XCTAssertEqual(dataStore.allDogsCount(type: .sample), 1)
+
         let newDog = dataStore.saveDog(model: Mocks.Toto)!
         XCTAssertNotNil(newDog)
         XCTAssertNotEqual(dog.uuid, newDog.uuid)
@@ -66,30 +74,39 @@ class DataManagementTests: XCTestCase {
         XCTAssertEqual(newDog.owner, Mocks.Toto.owner)
         XCTAssertEqual(newDog.blurb, Mocks.Toto.blurb)
         XCTAssertTrue(newDog.sample)
-        XCTAssertEqual(dataStore.allDogsCount(), 2)
+        XCTAssertEqual(dataStore.allDogsCount(type: .all), 2)
+        XCTAssertEqual(dataStore.allDogsCount(type: .real), 0)
+        XCTAssertEqual(dataStore.allDogsCount(type: .sample), 2)
     }
+    
     
     func testDelete() {
-        XCTAssertEqual(dataStore.allDogsCount(), 0)
-        let dog = dataStore.saveDog(model: snowy)!
-        XCTAssertEqual(dataStore.allDogsCount(), 1)
+        XCTAssertEqual(dataStore.allDogsCount(type: .all), 0)
+        let dog = dataStore.saveDog(model: Mocks.Snowy)!
+        XCTAssertEqual(dataStore.allDogsCount(type: .all), 1)
         dataStore.deleteDog(uuid: dog.uuid)
-        XCTAssertEqual(dataStore.allDogsCount(), 0)
+        XCTAssertEqual(dataStore.allDogsCount(type: .all), 0)
     }
     
-    func testAddSampleDogs() {
-        XCTAssertEqual(dataStore.allDogsCount(), 0)
+    
+    func testFindByUUID() {
         dataStore.addSampleDogs()
-        XCTAssertEqual(dataStore.allDogsCount(excludeSample: false), 3)
-        XCTAssertEqual(dataStore.allDogsCount(excludeSample: true), 0)
         
-        let auggie = dataStore.findDog(uuid: DataManagement.AUGGIE_UUID)!
+        let auggie = dataStore.findDog(uuid: DataManagement.auggie_image_id)!
         XCTAssertNotNil(auggie)
         XCTAssertEqual(auggie.name, "Auggie")
         XCTAssertEqual(auggie.owner, "Lewis family")
-        XCTAssertEqual(auggie.blurb, "Auggie is an 11-year-old cockapoo")
-        XCTAssertEqual(auggie.uuid, DataManagement.AUGGIE_UUID)
+        XCTAssertEqual(auggie.blurb, "At first glance, it's hard to tell if Auggie is a dog or a pogo stick! Auggie has some serious hops which he uses to great effect while enjoying his favorite hobbies - dog-agility and frisbee! But beware, if you bring out his frisbee - Auggie will be relentless until you toss it for him at least 20 times! When he's calmed down from his game of fetch, Auggie is a very affectionate fellow and loves to perch on the back of the couch next to you while you read or watch TV. And don't worry, Auggie will make his needs clear by letting out an expressive howl!")
+        XCTAssertEqual(auggie.uuid, DataManagement.auggie_image_id)
         XCTAssertTrue(auggie.sample)
     }
 
+    
+    func testAddSampleDogs() {
+        XCTAssertEqual(dataStore.allDogsCount(type: .all), 0)
+        dataStore.addSampleDogs()
+        XCTAssertEqual(dataStore.allDogsCount(type: .all), 5)
+        XCTAssertEqual(dataStore.allDogsCount(type: .real), 0)
+        XCTAssertEqual(dataStore.allDogsCount(type: .sample), 5)
+    }
 }

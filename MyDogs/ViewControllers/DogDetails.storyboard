@@ -25,9 +25,13 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ues-gW-ExE">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="211"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AUGGIE_UUID" translatesAutoresizingMaskIntoConstraints="NO" id="koE-Mc-imv">
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="koE-Mc-imv">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="211"/>
                                             </imageView>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z3o-mS-iC9">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="211"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
                                             <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z1l-Y8-L0O">
                                                 <rect key="frame" x="160" y="77" width="56" height="56"/>
                                                 <constraints>
@@ -42,13 +46,17 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
+                                            <constraint firstItem="z3o-mS-iC9" firstAttribute="height" secondItem="koE-Mc-imv" secondAttribute="height" id="36G-Re-Zcf"/>
                                             <constraint firstItem="koE-Mc-imv" firstAttribute="top" secondItem="Ues-gW-ExE" secondAttribute="top" id="898-wL-AQc"/>
                                             <constraint firstItem="Z1l-Y8-L0O" firstAttribute="centerX" secondItem="koE-Mc-imv" secondAttribute="centerX" id="AqA-vr-bKg"/>
                                             <constraint firstAttribute="bottom" secondItem="koE-Mc-imv" secondAttribute="bottom" id="C6J-NF-tSr"/>
                                             <constraint firstAttribute="trailing" secondItem="koE-Mc-imv" secondAttribute="trailing" id="KLW-0I-fKu"/>
                                             <constraint firstItem="koE-Mc-imv" firstAttribute="leading" secondItem="Ues-gW-ExE" secondAttribute="leading" id="LGf-9m-CfA"/>
                                             <constraint firstAttribute="width" secondItem="Ues-gW-ExE" secondAttribute="height" multiplier="16:9" id="Y0u-9U-cnW"/>
+                                            <constraint firstItem="z3o-mS-iC9" firstAttribute="centerX" secondItem="koE-Mc-imv" secondAttribute="centerX" id="d50-EI-B1P"/>
                                             <constraint firstItem="Z1l-Y8-L0O" firstAttribute="centerY" secondItem="koE-Mc-imv" secondAttribute="centerY" id="hdM-sj-oJ7"/>
+                                            <constraint firstItem="z3o-mS-iC9" firstAttribute="width" secondItem="koE-Mc-imv" secondAttribute="width" id="n8e-vK-BQG"/>
+                                            <constraint firstItem="z3o-mS-iC9" firstAttribute="centerY" secondItem="koE-Mc-imv" secondAttribute="centerY" id="pMu-6d-2tz"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UnJ-dU-I1q" customClass="DogDatumView" customModule="MyDogs" customModuleProvider="target">
@@ -89,6 +97,7 @@
                         <outlet property="imageView" destination="koE-Mc-imv" id="2Zx-5E-UNp"/>
                         <outlet property="nameDatumView" destination="UnJ-dU-I1q" id="GQc-aQ-VBz"/>
                         <outlet property="ownerDatumView" destination="RdA-Jr-Ipj" id="jwE-oM-pMB"/>
+                        <outlet property="tapRecevierView" destination="z3o-mS-iC9" id="mRx-Tt-Bo3"/>
                         <outlet property="textView" destination="A5c-t6-3L9" id="1Zv-uD-6I8"/>
                     </connections>
                 </viewController>
@@ -98,7 +107,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="AUGGIE_UUID" width="1008" height="737"/>
         <image name="icn-add-photo" width="32" height="32"/>
     </resources>
 </document>

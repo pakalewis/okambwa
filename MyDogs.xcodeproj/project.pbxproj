@@ -23,10 +23,11 @@
 		2CC5016921326DB900535878 /* DogDatumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC5016821326DB900535878 /* DogDatumView.swift */; };
 		2CC5016C213274F800535878 /* MyDogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC5016A213274F800535878 /* MyDogCell.swift */; };
 		2CC5016D213274F800535878 /* MyDogCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CC5016B213274F800535878 /* MyDogCell.xib */; };
-		2CC501712132883100535878 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC501702132883100535878 /* Helpers.swift */; };
+		2CC501712132883100535878 /* MiscellaneousHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC501702132883100535878 /* MiscellaneousHelpers.swift */; };
 		2CC5EBB32134D56800EB1C02 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC5EBB22134D56800EB1C02 /* CoreDataStack.swift */; };
 		2CC5EBE42134E5DB00EB1C02 /* DataManagementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC5EBE32134E5DB00EB1C02 /* DataManagementTests.swift */; };
 		2CC5EBE62134F2C500EB1C02 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC5EBE52134F2C500EB1C02 /* Mocks.swift */; };
+		2CCA12D22136340200D0987D /* Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA12D12136340200D0987D /* Notes.swift */; };
 		2CCB2381213293A900679E9F /* sf-ui-display-medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2CCB2379213293A800679E9F /* sf-ui-display-medium.otf */; };
 		2CCB2382213293A900679E9F /* sf-ui-display-medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2CCB2379213293A800679E9F /* sf-ui-display-medium.otf */; };
 		2CCB2383213293A900679E9F /* sf-ui-display-thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2CCB237A213293A800679E9F /* sf-ui-display-thin.otf */; };
@@ -80,10 +81,11 @@
 		2CC5016821326DB900535878 /* DogDatumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogDatumView.swift; sourceTree = "<group>"; };
 		2CC5016A213274F800535878 /* MyDogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDogCell.swift; sourceTree = "<group>"; };
 		2CC5016B213274F800535878 /* MyDogCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MyDogCell.xib; sourceTree = "<group>"; };
-		2CC501702132883100535878 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		2CC501702132883100535878 /* MiscellaneousHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscellaneousHelpers.swift; sourceTree = "<group>"; };
 		2CC5EBB22134D56800EB1C02 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		2CC5EBE32134E5DB00EB1C02 /* DataManagementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagementTests.swift; sourceTree = "<group>"; };
 		2CC5EBE52134F2C500EB1C02 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
+		2CCA12D12136340200D0987D /* Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes.swift; sourceTree = "<group>"; };
 		2CCB2379213293A800679E9F /* sf-ui-display-medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sf-ui-display-medium.otf"; sourceTree = "<group>"; };
 		2CCB237A213293A800679E9F /* sf-ui-display-thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sf-ui-display-thin.otf"; sourceTree = "<group>"; };
 		2CCB237B213293A800679E9F /* sf-ui-display-black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sf-ui-display-black.otf"; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 		2CC501382132555C00535878 /* MyDogs */ = {
 			isa = PBXGroup;
 			children = (
+				2CCA12D12136340200D0987D /* Notes.swift */,
 				2CCB239A2133D8F800679E9F /* Coordination */,
 				2CCB239B2133D90D00679E9F /* ViewControllers */,
 				2CCB239C2133D92700679E9F /* Subviews */,
@@ -181,7 +184,7 @@
 				2CC501392132555C00535878 /* AppDelegate.swift */,
 				2CC5015C2132560000535878 /* Root.swift */,
 				2CCB2394213385EF00679E9F /* PhotoManagement.swift */,
-				2CC501702132883100535878 /* Helpers.swift */,
+				2CC501702132883100535878 /* MiscellaneousHelpers.swift */,
 			);
 			path = Coordination;
 			sourceTree = "<group>";
@@ -342,9 +345,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				2CC5015F21325C8300535878 /* DogDetailsViewController.swift in Sources */,
+				2CCA12D22136340200D0987D /* Notes.swift in Sources */,
 				2CC50165213266E900535878 /* Dog.swift in Sources */,
 				2CC5013C2132555C00535878 /* MyDogsViewController.swift in Sources */,
-				2CC501712132883100535878 /* Helpers.swift in Sources */,
+				2CC501712132883100535878 /* MiscellaneousHelpers.swift in Sources */,
 				2CCB23982133C80100679E9F /* SampleProfilesViewController.swift in Sources */,
 				2CC50163213265B300535878 /* DataManagement.swift in Sources */,
 				2CC5EBB32134D56800EB1C02 /* CoreDataStack.swift in Sources */,

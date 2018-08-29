@@ -5,10 +5,8 @@ enum DetailsMode {
 }
 
 protocol DogDetailsViewControllerDelegate: class {
-    func cancel()
-    func save()
-    func done()
-    func addPhoto()
+    func close()
+    func saveSuccessful()
 }
 
 class DogDetailsViewController: UIViewController {
@@ -25,6 +23,7 @@ class DogDetailsViewController: UIViewController {
     }
     
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var tapRecevierView: UIView!
     @IBOutlet weak var addPhotoButton: UIButton!
     @IBOutlet weak var nameDatumView: DogDatumView!
     @IBOutlet weak var ownerDatumView: DogDatumView!
@@ -35,12 +34,49 @@ class DogDetailsViewController: UIViewController {
     var mode = DetailsMode.readOnly
     weak var delegate: DogDetailsViewControllerDelegate?
 
+    var tempContainerView: UIView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTextView()
         configureViews(forMode: self.mode)
+        
+        let photoTap = UITapGestureRecognizer(target: self, action: #selector(viewFullImage))
+        tapRecevierView.addGestureRecognizer(photoTap)
     }
+    
+    @objc func viewFullImage() {
+        guard let image = imageView.image else { return }
+        
+        let container = UIView(frame: view.bounds)
+        container.alpha = 0.0
+        let tempImageView = UIImageView(frame: view.bounds)
+        tempImageView.backgroundColor = Colors._555555
+        tempImageView.contentMode = .scaleAspectFit
+        tempImageView.image = image
+        container.addSubview(tempImageView)
+        
+        let dismissPhotoTap = UITapGestureRecognizer(target: self, action: #selector(dismissFullImage))
+        container.addGestureRecognizer(dismissPhotoTap)
+
+        view.addSubview(container)
+        tempContainerView = container
+        
+        UIView.animate(withDuration: 0.2, animations: {
+            container.alpha = 1.0
+        })
+
+    }
+    
+    @objc func dismissFullImage() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.tempContainerView?.alpha = 0.0
+        }) { (done) in
+            self.tempContainerView?.removeFromSuperview()
+            self.tempContainerView = nil
+        }
+    }
+
     
     func configureTextView() {
         textView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -58,8 +94,8 @@ class DogDetailsViewController: UIViewController {
         
         switch mode {
         case .create, .edit:
-            leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
-            rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(save))
+            leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelOrDoneButtonTapped))
+            rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveButtonTapped))
             
             if mode == .create {
                 self.title = "New Dog"
@@ -76,7 +112,7 @@ class DogDetailsViewController: UIViewController {
 
         case .readOnly:
             self.title = "Dog Details"
-            leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+            leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(cancelOrDoneButtonTapped))
             textView.isEditable = false
             
             name = dogModel.name
@@ -91,10 +127,12 @@ class DogDetailsViewController: UIViewController {
         }
         
         leftBarButtonItem.setTitleTextAttributes(FontsAndStyles.navigationBarTextAttributes(component: .barButton), for: .normal)
+        leftBarButtonItem.tintColor = .white
         navigationItem.setLeftBarButton(leftBarButtonItem, animated: true)
 
         if let rightButton = rightBarButtonItem {
             rightButton.setTitleTextAttributes(FontsAndStyles.navigationBarTextAttributes(component: .barButton), for: .normal)
+            rightButton.tintColor = .white
             navigationItem.setRightBarButton(rightButton, animated: true)
         }
         
@@ -118,29 +156,20 @@ class DogDetailsViewController: UIViewController {
         }        
     }
     
-    @objc func cancel() {
-        self.delegate?.cancel()
+    
+    @objc func cancelOrDoneButtonTapped() {
+        self.delegate?.close()
     }
 
-    @objc func save() {
+    
+    @objc func saveButtonTapped() {
         if let _ = DataManagement.shared.saveDog(model: self.dogModel) {
-            // success saving
+            self.delegate?.saveSuccessful()
         } else {
-            // error
+            showBanner(text: "Unable to save", backgroundColor: .red)
         }
     }
-
-    @objc func done() {
-        self.delegate?.done()
-    }
     
-    func showPicker() {
-        let imagePickerController = UIImagePickerController()
-        imagePickerController.delegate = self
-        imagePickerController.sourceType = UIImagePickerControllerSourceType.savedPhotosAlbum
-        imagePickerController.allowsEditing = false
-        self.present(imagePickerController, animated: true, completion: nil)
-    }
     
     @IBAction func addPhotoButtonTapped() {
         switch PhotoManagement.checkStatus() {
@@ -163,9 +192,20 @@ class DogDetailsViewController: UIViewController {
                 self.present(alert, animated: true, completion: nil)
         }
     }
+    
+    func showPicker() {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.sourceType = UIImagePickerControllerSourceType.savedPhotosAlbum
+        imagePickerController.allowsEditing = false
+        self.present(imagePickerController, animated: true, completion: nil)
+    }
 }
 
 
+//|----------------------------------------------------------------------|\\
+//|                         Dog Datum View Delegate                      |\\
+//|----------------------------------------------------------------------|\\
 
 extension DogDetailsViewController: DogDatumViewDelegate {
     func contentEdited(newValue: String, dogDatumView: DogDatumView) {
@@ -176,6 +216,11 @@ extension DogDetailsViewController: DogDatumViewDelegate {
         }
     }
 }
+
+
+//|----------------------------------------------------------------------|\\
+//|                            UITextView Delegate                       |\\
+//|----------------------------------------------------------------------|\\
 
 extension DogDetailsViewController: UITextViewDelegate {    
     func textViewDidChange(_ textView: UITextView) {
@@ -201,6 +246,11 @@ extension DogDetailsViewController: UITextViewDelegate {
         }
     }
 }
+
+
+//|----------------------------------------------------------------------|\\
+//|                   UIImage Picker Controller Delegate                 |\\
+//|----------------------------------------------------------------------|\\
 
 extension DogDetailsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {

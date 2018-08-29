@@ -8,16 +8,17 @@ class Root: NSObject {
     override init() {
         super.init()
         
-        myDogsViewController.delegate = self
         let barButtonItem = UIBarButtonItem(title: "Add Dog", style: .plain, target: self, action: #selector(addNewDog))
+        barButtonItem.tintColor = .white
         barButtonItem.setTitleTextAttributes(FontsAndStyles.navigationBarTextAttributes(component: .barButton), for: .normal)
         myDogsViewController.navigationItem.setRightBarButton(barButtonItem, animated: false)
+        myDogsViewController.delegate = self
+        
         navigationController = UINavigationController(rootViewController: myDogsViewController)
         navigationController.applyRoverStyle()
         
-        if DataManagement.shared.allDogsCount() == 0 {
-            DataManagement.shared.addSampleDogs()
-        }
+        // seed CoreData with a few sample dogs
+        DataManagement.shared.addSampleDogs()
     }
     
     
@@ -37,28 +38,29 @@ class Root: NSObject {
     }
 }
 
+
+//|----------------------------------------------------------------------|\\
+//|                         Dog List ViewController                      |\\
+//|----------------------------------------------------------------------|\\
+
 extension Root: MyDogsViewControllerDelegate {
     func dogSelected(dog: Dog) {
         displayDetails(dog: dog, mode: .edit)
     }
 }
 
+
+//|----------------------------------------------------------------------|\\
+//|                         Dog Details ViewController                   |\\
+//|----------------------------------------------------------------------|\\
+
 extension Root: DogDetailsViewControllerDelegate {
-    func cancel() {
+    func close() {
         navigationController.popViewController(animated: true)
-
     }
     
-    func done() {
+    func saveSuccessful() {
         navigationController.popViewController(animated: true)
-
-    }
-    
-    func save() {
-        navigationController.popViewController(animated: true)
-
-    }
-    
-    func addPhoto() {
+        navigationController.showBanner(text: "Saved!", backgroundColor: .gray)
     }
 }

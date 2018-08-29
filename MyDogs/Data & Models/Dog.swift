@@ -2,10 +2,6 @@ import Foundation
 import CoreData
 import UIKit
 
-struct DogAttributes {
-    let name: String
-    let blurb: String
-}
 
 open class DogModel: NSObject {
     var name: String
@@ -31,7 +27,6 @@ open class DogModel: NSObject {
             let imageData = try Data(contentsOf: fileURL)
             return UIImage(data: imageData)
         } catch {
-            print("Error loading image : \(error)")
             return nil
         }
     }
@@ -58,6 +53,7 @@ open class Dog: NSManagedObject {
         self.sample = model.sample
     }
     
+    
     func printDescription() {
         let desc = """
         Dog:
@@ -69,5 +65,4 @@ open class Dog: NSManagedObject {
         """
         print(desc)
     }
-    
 }

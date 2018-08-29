@@ -13,6 +13,7 @@ class MyDogsViewController: UIViewController {
     }
 
     @IBOutlet weak var tableOfDogs: UITableView!
+    @IBOutlet weak var noDogsLabel: UILabel!
     
     @IBOutlet weak var seeSampleBiosButton: UIButton!
     
@@ -24,10 +25,14 @@ class MyDogsViewController: UIViewController {
         super.viewDidLoad()
         
         self.title = "My Dogs"
+        self.view.backgroundColor = Colors._77C045
         
-        
-        seeSampleBiosButton.layer.cornerRadius = min(seeSampleBiosButton.bounds.width, seeSampleBiosButton.bounds.height) / 2
-        seeSampleBiosButton.backgroundColor = .blue
+        seeSampleBiosButton.setTitle("View sample profiles!", for: .normal)
+        seeSampleBiosButton.layer.cornerRadius = 5
+        seeSampleBiosButton.layer.borderColor = UIColor.darkGray.cgColor
+        seeSampleBiosButton.layer.borderWidth = 2
+        seeSampleBiosButton.backgroundColor = .white
+        seeSampleBiosButton.isHidden = DataManagement.shared.allDogsCount(type: .sample) == 0
         
         tableOfDogs.delegate = self
         tableOfDogs.dataSource = self
@@ -45,10 +50,10 @@ class MyDogsViewController: UIViewController {
     }
     
     func refetch() {
-        if let dogs = DataManagement.shared.allDogs() {
-            self.dogs = dogs
-            tableOfDogs.reloadData()
-        }
+        let dogs = DataManagement.shared.allDogs(type: .real) ?? []
+        self.dogs = dogs
+        tableOfDogs.reloadData()
+        noDogsLabel.isHidden = dogs.count > 0
     }
 
     @objc func close() {
@@ -56,18 +61,21 @@ class MyDogsViewController: UIViewController {
     }
     
     @IBAction func seeSampleProfilesButtonTapped(_ sender: Any) {
-        if let pages = SampleProfilesViewController.samplePages() {
-            let sampler = SampleProfilesViewController()
-            sampler.pages = pages
-            let closeButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(close))
-            closeButton.setTitleTextAttributes(FontsAndStyles.navigationBarTextAttributes(component: .barButton), for: .normal)
-            sampler.navigationItem.setLeftBarButton(closeButton, animated: true)
-            let nav = UINavigationController(rootViewController: sampler)
-            nav.applyRoverStyle()
-            self.present(nav, animated: true, completion: nil)
-        }
+        let sampler = SampleProfilesViewController()
+        let closeButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(close))
+        closeButton.setTitleTextAttributes(FontsAndStyles.navigationBarTextAttributes(component: .barButton), for: .normal)
+        closeButton.tintColor = .white
+        sampler.navigationItem.setLeftBarButton(closeButton, animated: true)
+        let nav = UINavigationController(rootViewController: sampler)
+        nav.applyRoverStyle()
+        self.present(nav, animated: true, completion: nil)
     }
 }
+
+
+//|----------------------------------------------------------------------|\\
+//|                    Table View Delegate / Data Source                 |\\
+//|----------------------------------------------------------------------|\\
 
 extension MyDogsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

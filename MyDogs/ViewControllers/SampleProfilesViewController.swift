@@ -9,27 +9,24 @@ class SampleProfilesViewController: UIViewController {
     
     var pageControl: UIPageControl = UIPageControl()
     
-
-    class func samplePages() -> [UIViewController]? {
+    class func samplePages() -> [UIViewController] {
         var pages = [UIViewController]()
-        if let sampleDogs = DataManagement.shared.allSampleDogs() {
+        if let sampleDogs = DataManagement.shared.allDogs(type: .sample) {
             for dog in sampleDogs {
                 let details = DogDetailsViewController.instance(mode: .readOnly)
                 details.dogModel = dog.model()
                 pages.append(details)
             }
         }
-        if pages.count == 3 {
-            return pages
-        } else {
-            return nil
-        }
+        return pages
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Sample Dogs"
 
+        pages = SampleProfilesViewController.samplePages()
+        
         pageViewController.delegate = self
         pageViewController.dataSource = self
         pageViewController.view.backgroundColor = .white
@@ -39,8 +36,8 @@ class SampleProfilesViewController: UIViewController {
         pageViewController.didMove(toParentViewController: self)
         if let firstPage = pages.first {
             pageViewController.setViewControllers([firstPage], direction: .forward, animated: false, completion: nil)
-        } else {
-            pageViewController.setViewControllers(nil, direction: .forward, animated: false, completion: nil)
+        } else {            
+            pageViewController.setViewControllers([UIViewController()], direction: .forward, animated: false, completion: nil)
         }
         
         pageControl.numberOfPages = pages.count

@@ -23,7 +23,7 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8IJ-ta-b8e">
                         <rect key="frame" x="15" y="15" width="320" height="167.5"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AUGGIE_UUID" translatesAutoresizingMaskIntoConstraints="NO" id="vYi-yk-UEv">
+                            <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vYi-yk-UEv">
                                 <rect key="frame" x="0.0" y="0.0" width="56" height="56"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="vYi-yk-UEv" secondAttribute="height" multiplier="1:1" id="A0H-k3-9bi"/>
@@ -84,7 +84,4 @@
             <point key="canvasLocation" x="24.5" y="158"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <image name="AUGGIE_UUID" width="1008" height="737"/>
-    </resources>
 </document>
