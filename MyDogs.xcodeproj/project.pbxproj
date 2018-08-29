@@ -28,6 +28,7 @@
 		2CC5EBE42134E5DB00EB1C02 /* DataManagementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC5EBE32134E5DB00EB1C02 /* DataManagementTests.swift */; };
 		2CC5EBE62134F2C500EB1C02 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC5EBE52134F2C500EB1C02 /* Mocks.swift */; };
 		2CCA12D22136340200D0987D /* Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA12D12136340200D0987D /* Notes.swift */; };
+		2CCA12D42136646600D0987D /* PhotoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCA12D32136646600D0987D /* PhotoTests.swift */; };
 		2CCB2381213293A900679E9F /* sf-ui-display-medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2CCB2379213293A800679E9F /* sf-ui-display-medium.otf */; };
 		2CCB2382213293A900679E9F /* sf-ui-display-medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2CCB2379213293A800679E9F /* sf-ui-display-medium.otf */; };
 		2CCB2383213293A900679E9F /* sf-ui-display-thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2CCB237A213293A800679E9F /* sf-ui-display-thin.otf */; };
@@ -86,6 +87,7 @@
 		2CC5EBE32134E5DB00EB1C02 /* DataManagementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagementTests.swift; sourceTree = "<group>"; };
 		2CC5EBE52134F2C500EB1C02 /* Mocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
 		2CCA12D12136340200D0987D /* Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes.swift; sourceTree = "<group>"; };
+		2CCA12D32136646600D0987D /* PhotoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTests.swift; sourceTree = "<group>"; };
 		2CCB2379213293A800679E9F /* sf-ui-display-medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sf-ui-display-medium.otf"; sourceTree = "<group>"; };
 		2CCB237A213293A800679E9F /* sf-ui-display-thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sf-ui-display-thin.otf"; sourceTree = "<group>"; };
 		2CCB237B213293A800679E9F /* sf-ui-display-black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sf-ui-display-black.otf"; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 				2CC5EBE52134F2C500EB1C02 /* Mocks.swift */,
 				2CC5EBE32134E5DB00EB1C02 /* DataManagementTests.swift */,
 				2CC501512132556100535878 /* DogDetailsViewControllerTests.swift */,
+				2CCA12D32136646600D0987D /* PhotoTests.swift */,
 				2CC501532132556100535878 /* Info.plist */,
 			);
 			path = MyDogsTests;
@@ -365,6 +368,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CCA12D42136646600D0987D /* PhotoTests.swift in Sources */,
 				2CC5EBE42134E5DB00EB1C02 /* DataManagementTests.swift in Sources */,
 				2CC501522132556100535878 /* DogDetailsViewControllerTests.swift in Sources */,
 				2CC5EBE62134F2C500EB1C02 /* Mocks.swift in Sources */,

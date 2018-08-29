@@ -11,18 +11,13 @@ class MyDogCell: UITableViewCell {
     @IBOutlet weak var blurbLabel: UILabel!
     
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-    }
-
     func display(dog: Dog) {
         let nameAttributes = FontsAndStyles.attributes(
             color: Colors._555555,
             font: .medium,
             size: 15,
-            lineHeight: 24,
-            lineHeightmultiple: 1.6,
+            lineHeight: 15,
+            lineHeightmultiple: 1,
             lineBreakMode: .byTruncatingTail
         )
         nameLabel.attributedText = NSAttributedString(string: dog.name, attributes: nameAttributes)
@@ -35,7 +30,6 @@ class MyDogCell: UITableViewCell {
             lineHeightmultiple: 1.6,
             lineBreakMode: .byTruncatingTail
         )
-
         blurbLabel.attributedText = NSAttributedString(string: dog.blurb, attributes: blurbAttributes)
 
         if let image = dog.model().image() {

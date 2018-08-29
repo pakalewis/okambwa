@@ -22,13 +22,7 @@ open class DogModel: NSObject {
         if let image = UIImage(named: self.uuid) {
             return image
         }
-        let fileURL = PhotoManagement.documentsURL().appendingPathComponent(uuid)
-        do {
-            let imageData = try Data(contentsOf: fileURL)
-            return UIImage(data: imageData)
-        } catch {
-            return nil
-        }
+        return PhotoManagement.retrievePhotoWith(identifier: uuid)
     }
 }
 

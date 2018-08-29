@@ -36,6 +36,8 @@ class DogDetailsViewController: UIViewController {
     var mode = DetailsMode.readOnly
     weak var delegate: DogDetailsViewControllerDelegate?
 
+    var newImage: UIImage?
+    
     var tempContainerView: UIView?
     
     override func viewDidLoad() {
@@ -57,16 +59,26 @@ class DogDetailsViewController: UIViewController {
         textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         textView.delegate = self
         
-        let toolBar = UIToolbar()
-        toolBar.barStyle = UIBarStyle.default
-        toolBar.isTranslucent = true
-        let space = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.done, target: self, action: #selector(dismissKeyboard))
-        
-        toolBar.setItems([space, doneButton], animated: false)
-        toolBar.isUserInteractionEnabled = true
-        toolBar.sizeToFit()
-        textView.inputAccessoryView = toolBar
+//        let toolBar = UIToolbar()
+//        toolBar.barStyle = UIBarStyle.default
+//        toolBar.isTranslucent = true
+//        let space = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+//        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.done, target: self, action: #selector(dismissKeyboard))
+//        
+//        toolBar.setItems([space, doneButton], animated: false)
+//        toolBar.isUserInteractionEnabled = true
+//        toolBar.sizeToFit()
+//        textView.inputAccessoryView = toolBar
+    }
+    
+    
+    func adjustTextViewHeight() {
+        let contentPlusBuffer = textView.contentSize.height + 50.0
+        if contentPlusBuffer > 100 {
+            textViewHeightConstraint.constant = contentPlusBuffer
+        } else {
+            textViewHeightConstraint.constant = 100
+        }
     }
     
     
@@ -132,7 +144,8 @@ class DogDetailsViewController: UIViewController {
             lineBreakMode: .byWordWrapping
         )
         textView.attributedText = NSAttributedString(string: bodyText, attributes: nameAttributes)
-
+        adjustTextViewHeight()
+        
         if let i = dogModel.image() {
             imageView.image = i
         } else {
@@ -169,10 +182,19 @@ class DogDetailsViewController: UIViewController {
 
     
     @objc func saveButtonTapped() {
-        if let _ = DataManagement.shared.saveDog(model: self.dogModel) {
-            self.delegate?.saveSuccessful()
-        } else {
-            showBanner(text: "Unable to save", backgroundColor: .red)
+        PhotoManagement.savePhoto(newNameOfFile: dogModel.uuid, image: newImage) { (image) in
+            if let _ = image {
+                if let _ = DataManagement.shared.saveDog(model: self.dogModel) {
+                    DispatchQueue.main.async {
+                        self.delegate?.saveSuccessful()
+                    }
+                } else {
+                    let _ = PhotoManagement.deletePhotoWith(identifier: self.dogModel.uuid)
+                    self.showBanner(text: "Unable to save", backgroundColor: .red)
+                }
+            } else {
+                self.showBanner(text: "Unable to save", backgroundColor: .red)
+            }
         }
     }
     
@@ -270,13 +292,7 @@ extension DogDetailsViewController: UITextViewDelegate {
         } else {
             textView.text = PLACEHOLDER_TEXT
         }
-        
-        let contentPlusBuffer = textView.contentSize.height + 50.0
-        if contentPlusBuffer > 100 {
-            textViewHeightConstraint.constant = contentPlusBuffer
-        } else {
-            textViewHeightConstraint.constant = 100
-        }
+        adjustTextViewHeight()
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -301,17 +317,11 @@ extension DogDetailsViewController: UITextViewDelegate {
 
 extension DogDetailsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        PhotoManagement.savePhoto(newNameOfFile: dogModel.uuid, mediaInfo: info) { (image) in
-            if let image = image {
-                self.imageView.image = image
-                self.dismiss(animated: true, completion: nil)
-            } else {
-                let alert = UIAlertController.init(title: "Error", message: "couldn't save image", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                picker.present(alert, animated: true, completion: nil)
-            }
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            newImage = image
+            imageView.image = image
+            dismiss(animated: true, completion: nil)
         }
-
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

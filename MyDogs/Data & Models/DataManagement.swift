@@ -108,6 +108,7 @@ class DataManagement: NSObject {
                 coreData.context.delete(dog)
                 do {
                     try coreData.context.save()
+                    let _ = PhotoManagement.deletePhotoWith(identifier: dog.uuid)
                     completion?(true)
                 } catch {
                     completion?(false)

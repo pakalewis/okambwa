@@ -83,8 +83,11 @@ class DataManagementTests: XCTestCase {
     
     
     func testDelete() {
+        let snowy = Mocks.Snowy
+        XCTAssertNil(PhotoManagement.retrievePhotoWith(identifier: snowy.uuid))
+        
         XCTAssertEqual(dataStore.allDogsCount(type: .all), 0)
-        let dog = dataStore.saveDog(model: Mocks.Snowy)!
+        let dog = dataStore.saveDog(model: snowy)!
         XCTAssertEqual(dataStore.allDogsCount(type: .all), 1)
         dataStore.deleteDog(uuid: dog.uuid)
         XCTAssertEqual(dataStore.allDogsCount(type: .all), 0)
