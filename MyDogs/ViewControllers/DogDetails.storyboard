@@ -16,11 +16,11 @@
             <objects>
                 <viewController id="M2R-Yb-KXf" customClass="DogDetailsViewController" customModule="MyDogs" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="93H-D7-sMZ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="efp-0h-sei">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1oV-a6-q5G">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="411"/>
@@ -34,7 +34,7 @@
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="koE-Mc-imv">
                                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="211"/>
                                                             </imageView>
-                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z3o-mS-iC9">
+                                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z3o-mS-iC9">
                                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="211"/>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </view>
@@ -122,13 +122,15 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="efp-0h-sei" secondAttribute="bottom" id="5Za-SC-OQ6"/>
-                            <constraint firstItem="efp-0h-sei" firstAttribute="top" secondItem="93H-D7-sMZ" secondAttribute="top" id="Fmr-x4-aCH"/>
-                            <constraint firstItem="efp-0h-sei" firstAttribute="leading" secondItem="93H-D7-sMZ" secondAttribute="leading" id="axE-wW-4Ek"/>
-                            <constraint firstAttribute="trailing" secondItem="efp-0h-sei" secondAttribute="trailing" id="l2v-wS-YzK"/>
+                            <constraint firstItem="Gb3-2y-hNT" firstAttribute="trailing" secondItem="efp-0h-sei" secondAttribute="trailing" id="A6U-f6-Haz"/>
+                            <constraint firstItem="Gb3-2y-hNT" firstAttribute="top" secondItem="efp-0h-sei" secondAttribute="top" id="MWL-fb-vHq"/>
+                            <constraint firstItem="Gb3-2y-hNT" firstAttribute="bottom" secondItem="efp-0h-sei" secondAttribute="bottom" id="iWr-vd-bsU"/>
+                            <constraint firstItem="efp-0h-sei" firstAttribute="leading" secondItem="Gb3-2y-hNT" secondAttribute="leading" id="kjr-qM-7WX"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Gb3-2y-hNT"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
                         <outlet property="addPhotoButton" destination="Z1l-Y8-L0O" id="rxL-3d-Mtp"/>
                         <outlet property="contentView" destination="1oV-a6-q5G" id="RZx-jV-524"/>

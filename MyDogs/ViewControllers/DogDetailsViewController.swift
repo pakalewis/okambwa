@@ -50,8 +50,11 @@ class DogDetailsViewController: UIViewController {
         configureTextView()
         configureViews(forMode: self.mode)
         
-        let photoTap = UITapGestureRecognizer(target: self, action: #selector(viewFullImage))
+        let photoTap = UITapGestureRecognizer(target: self, action: #selector(handlePhotoTap))
         tapRecevierView.addGestureRecognizer(photoTap)
+
+        let dismissKeyboardTap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(dismissKeyboardTap)
     }
     
     
@@ -189,8 +192,12 @@ class DogDetailsViewController: UIViewController {
         }
     }
     
-    
-    @objc func viewFullImage() {
+    @objc func handlePhotoTap() {
+        view.endEditing(true)
+        viewFullImage()
+    }
+
+    func viewFullImage() {
         guard let image = imageView.image else { return }
         
         let container = UIView(frame: view.bounds)
@@ -214,6 +221,7 @@ class DogDetailsViewController: UIViewController {
     
     
     @objc func dismissFullImage() {
+        view.endEditing(true)
         UIView.animate(withDuration: 0.2, animations: {
             self.tempContainerView?.alpha = 0.0
         }) { (done) in
