@@ -102,7 +102,7 @@
                                                 </subviews>
                                             </stackView>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="VRK-A9-3iO" firstAttribute="top" secondItem="1oV-a6-q5G" secondAttribute="top" id="WL0-02-tVa"/>
                                             <constraint firstAttribute="trailing" secondItem="VRK-A9-3iO" secondAttribute="trailing" id="k5T-7b-lsh"/>
@@ -131,6 +131,7 @@
                     </view>
                     <connections>
                         <outlet property="addPhotoButton" destination="Z1l-Y8-L0O" id="rxL-3d-Mtp"/>
+                        <outlet property="contentView" destination="1oV-a6-q5G" id="RZx-jV-524"/>
                         <outlet property="imageView" destination="koE-Mc-imv" id="2Zx-5E-UNp"/>
                         <outlet property="nameDatumView" destination="UnJ-dU-I1q" id="GQc-aQ-VBz"/>
                         <outlet property="ownerDatumView" destination="RdA-Jr-Ipj" id="jwE-oM-pMB"/>

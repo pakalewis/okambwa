@@ -54,11 +54,6 @@ class DogDatumView: UIView {
 }
 
 extension DogDatumView: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        print("did begin editing")
-    }
-    
-    
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
         notifyContentUpdates()
     }

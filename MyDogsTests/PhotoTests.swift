@@ -3,63 +3,41 @@ import XCTest
 
 class PhotoTests: XCTestCase {
     
+    let IDENTIFIER_A = "IDENTIFIER_A"
+    let IDENTIFIER_B = "IDENTIFIER_B"
+
+    let IMAGE_A = UIImage(named: DataManagement.auggie_image_id)!
+    let IMAGE_B = UIImage(named: DataManagement.murphy_image_id)!
+
     override func setUp() {
         super.setUp()
 
-        var files: [String]?
-        files = try? FileManager.default.contentsOfDirectory(atPath: PhotoManagement.documentsURL().path)
+        let _ = PhotoManagement.deletePhotoWith(identifier: IDENTIFIER_A)
+        let _ = PhotoManagement.deletePhotoWith(identifier: IDENTIFIER_B)
+    }
+    
+    
+    func testSaveAndRetrievePhoto() {
+        XCTAssertNil(PhotoManagement.retrievePhotoWith(identifier: IDENTIFIER_A))
+        XCTAssertNotNil(PhotoManagement.savePhoto(identifier: IDENTIFIER_A, image: IMAGE_A))
+        XCTAssertNotNil(PhotoManagement.retrievePhotoWith(identifier: IDENTIFIER_A))
+    }
 
-        for file in files ?? [] {
-            let _ = PhotoManagement.deletePhotoWith(identifier: file)
-        }
-    }
-    
-    
-    func testSavePhoto() {
-        let image = UIImage(named: DataManagement.auggie_image_id)!
-        PhotoManagement.savePhoto(newNameOfFile: DataManagement.auggie_image_id, image: image) { (savedImage) in
-            XCTAssertNotNil(savedImage)
-        }
-    }
-    
 
     func testDeletePhoto() {
-        let identifier = DataManagement.auggie_image_id
-        let image = UIImage(named: identifier)!
-
-        XCTAssertNil(PhotoManagement.retrievePhotoWith(identifier: identifier))
-
-        PhotoManagement.savePhoto(newNameOfFile: identifier, image: image) { (savedImage) in
-            XCTAssertNotNil(savedImage)
-            XCTAssertNotNil(PhotoManagement.retrievePhotoWith(identifier: identifier))
-        }
-
-        XCTAssertTrue(PhotoManagement.deletePhotoWith(identifier: identifier))
-        XCTAssertNil(PhotoManagement.retrievePhotoWith(identifier: identifier))
+        XCTAssertNil(PhotoManagement.retrievePhotoWith(identifier: IDENTIFIER_A))
+        XCTAssertNotNil(PhotoManagement.savePhoto(identifier: IDENTIFIER_A, image: IMAGE_A))
+        XCTAssertNotNil(PhotoManagement.retrievePhotoWith(identifier: IDENTIFIER_A))
+        XCTAssertTrue(PhotoManagement.deletePhotoWith(identifier: IDENTIFIER_A))
+        XCTAssertNil(PhotoManagement.retrievePhotoWith(identifier: IDENTIFIER_A))
     }
 
     
     func testSaveAndOverwritePhoto() {
-        let identifier = DataManagement.auggie_image_id
-        
-        XCTAssertNil(PhotoManagement.retrievePhotoWith(identifier: identifier))
-        
-        let image = UIImage(named: DataManagement.auggie_image_id)!
-        PhotoManagement.savePhoto(newNameOfFile: DataManagement.auggie_image_id, image: image) { (savedImage) in
-            XCTAssertNotNil(savedImage)
-            XCTAssertNotNil(PhotoManagement.retrievePhotoWith(identifier: identifier))
-        }
-        
-        let newImage = UIImage(named: DataManagement.murphy_image_id)!
-        PhotoManagement.savePhoto(newNameOfFile: DataManagement.auggie_image_id, image: newImage) { (savedImage) in
-            XCTAssertNotNil(savedImage)
-            XCTAssertNotNil(PhotoManagement.retrievePhotoWith(identifier: identifier))
-        }
-    }
-    
-    
-    func testRetrievePhoto() {
-        let identifier = DataManagement.auggie_image_id
-        XCTAssertNil(PhotoManagement.retrievePhotoWith(identifier: identifier))
+        XCTAssertNotNil(PhotoManagement.savePhoto(identifier: IDENTIFIER_A, image: IMAGE_A))
+        XCTAssertNotNil(PhotoManagement.retrievePhotoWith(identifier: IDENTIFIER_A))
+
+        XCTAssertNotNil(PhotoManagement.savePhoto(identifier: IDENTIFIER_A, image: IMAGE_B))
+        XCTAssertNotNil(PhotoManagement.retrievePhotoWith(identifier: IDENTIFIER_A))
     }
 }

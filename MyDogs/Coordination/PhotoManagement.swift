@@ -14,39 +14,51 @@ class PhotoManagement: NSObject {
     
     
     class func documentsURL() -> URL {
-        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        do {
+            let url = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            return url
+        }
     }
 
 
-    class func savePhoto(newNameOfFile: String, image: UIImage?, completion: @escaping ((_ image: UIImage?) -> Void)) {
+    /**
+     Constructs URL for a file in the documents directory with the given name
+     */
+    class func fileURL(identifier: String) -> URL {
+        return PhotoManagement.documentsURL().appendingPathComponent("\(identifier)")
+    }
+    
+    
+    /**
+     Save image data in documents directory with the given file name
+     Overwrites any existing file
+     */
+    class func savePhoto(identifier: String, image: UIImage?) -> UIImage? {
         guard let image = image else {
-            completion(nil)
-            return
+            return nil
         }
 
-        let documentsURL = PhotoManagement.documentsURL()
-        let documentPath = documentsURL.path
-        let filePath: URL = documentsURL.appendingPathComponent(newNameOfFile)
-        
+        let filePath = PhotoManagement.fileURL(identifier: identifier)
         do {
-            let fileNames = try FileManager.default.contentsOfDirectory(atPath: documentPath)
+            let fileNames = try FileManager.default.contentsOfDirectory(atPath: PhotoManagement.documentsURL().path)
             for existingName in fileNames {
-                if existingName == newNameOfFile {
+                if existingName == identifier {
                     try FileManager.default.removeItem(atPath: filePath.path)
                 }
             }
             try UIImagePNGRepresentation(image)?.write(to: filePath, options: .atomic)
-            completion(image)
-            return
+            return image
         } catch {
-            completion(nil)
-            return
+            return nil
         }
     }
     
     
+    /**
+     Attempt to read data from a file in the documents directory with the given file name
+     */
     class func retrievePhotoWith(identifier: String) -> UIImage? {
-        let fileURL = PhotoManagement.documentsURL().appendingPathComponent(identifier)
+        let fileURL = PhotoManagement.fileURL(identifier: identifier)
         do {
             let imageData = try Data(contentsOf: fileURL)
             return UIImage(data: imageData)
@@ -55,14 +67,12 @@ class PhotoManagement: NSObject {
         }
     }
     
-    class func deletePhotoWith(identifier: String) -> Bool {
-        let documentsURL = PhotoManagement.documentsURL()
-        let filePath: URL = documentsURL.appendingPathComponent(identifier)
-        
-        do {
-            try FileManager.default.removeItem(at: filePath)
-            print("deleted \(identifier)")
 
+    
+    class func deletePhotoWith(identifier: String) -> Bool {
+        let fileURL = PhotoManagement.fileURL(identifier: identifier)
+        do {
+            try FileManager.default.removeItem(at: fileURL)
             return true
         } catch {
             return false

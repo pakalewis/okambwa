@@ -23,6 +23,7 @@ class DogDetailsViewController: UIViewController {
     }
     
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var tapRecevierView: UIView!
     @IBOutlet weak var addPhotoButton: UIButton!
@@ -58,17 +59,6 @@ class DogDetailsViewController: UIViewController {
         textView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         textView.delegate = self
-        
-//        let toolBar = UIToolbar()
-//        toolBar.barStyle = UIBarStyle.default
-//        toolBar.isTranslucent = true
-//        let space = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-//        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.done, target: self, action: #selector(dismissKeyboard))
-//        
-//        toolBar.setItems([space, doneButton], animated: false)
-//        toolBar.isUserInteractionEnabled = true
-//        toolBar.sizeToFit()
-//        textView.inputAccessoryView = toolBar
     }
     
     
@@ -151,7 +141,10 @@ class DogDetailsViewController: UIViewController {
         } else {
             imageView.image = nil
             imageView.backgroundColor = Colors._555555
-        }        
+        }
+        
+        contentView.backgroundColor = Colors._555555
+        scrollView.backgroundColor = Colors._555555
     }
     
     //|----------------------------------------------------------------------|\\
@@ -182,19 +175,17 @@ class DogDetailsViewController: UIViewController {
 
     
     @objc func saveButtonTapped() {
-        PhotoManagement.savePhoto(newNameOfFile: dogModel.uuid, image: newImage) { (image) in
-            if let _ = image {
-                if let _ = DataManagement.shared.saveDog(model: self.dogModel) {
-                    DispatchQueue.main.async {
-                        self.delegate?.saveSuccessful()
-                    }
-                } else {
-                    let _ = PhotoManagement.deletePhotoWith(identifier: self.dogModel.uuid)
-                    self.showBanner(text: "Unable to save", backgroundColor: .red)
-                }
-            } else {
-                self.showBanner(text: "Unable to save", backgroundColor: .red)
+        if let imageToSave = newImage {
+            if PhotoManagement.savePhoto(identifier: dogModel.uuid, image: imageToSave) == nil {
+                self.showBanner(text: "Unable to save photo", backgroundColor: .red)
+                return
             }
+        }
+        if let _ = DataManagement.shared.saveDog(model: self.dogModel) {
+            self.delegate?.saveSuccessful()
+        } else {
+            let _ = PhotoManagement.deletePhotoWith(identifier: self.dogModel.uuid)
+            self.showBanner(text: "Unable to save", backgroundColor: .red)
         }
     }
     

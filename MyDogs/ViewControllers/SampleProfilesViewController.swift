@@ -23,7 +23,6 @@ class SampleProfilesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Sample Dogs"
 
         pages = SampleProfilesViewController.samplePages()
         
@@ -40,18 +39,18 @@ class SampleProfilesViewController: UIViewController {
             pageViewController.setViewControllers([UIViewController()], direction: .forward, animated: false, completion: nil)
         }
         
-        pageControl.numberOfPages = pages.count
-        pageControl.currentPage = 0
-        pageControl.pageIndicatorTintColor = Colors._777777
-        pageControl.currentPageIndicatorTintColor = Colors._77C045
-        view.addSubview(pageControl)
-        
-        pageControl.translatesAutoresizingMaskIntoConstraints = false
-        let centerConstraint = NSLayoutConstraint(item: view, attribute: .centerX, relatedBy: .equal, toItem: pageControl, attribute: .centerX, multiplier: 1, constant: 0)
-        centerConstraint.isActive = true
-        let bottomConstraint = NSLayoutConstraint(item: view, attribute: .bottom, relatedBy: .equal, toItem: pageControl, attribute: .bottom, multiplier: 1, constant: 20)
-        bottomConstraint.isActive = true
-        view.bringSubview(toFront: pageControl)
+        if let nav = navigationController {
+            let size = nav.navigationBar.bounds.size
+            let origin = CGPoint(x: size.width / 2, y: size.height / 2)
+
+            pageControl = UIPageControl(frame: CGRect(x: origin.x, y: origin.y, width: 0, height: 0))
+            pageControl.backgroundColor = .clear
+            pageControl.numberOfPages = pages.count
+            pageControl.currentPage = 0
+            pageControl.pageIndicatorTintColor = Colors._777777
+            pageControl.currentPageIndicatorTintColor = .black
+            self.navigationItem.titleView = pageControl
+        }
     }
     
     func indexOf(viewController: UIViewController) -> Int? {
