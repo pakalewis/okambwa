@@ -154,8 +154,8 @@
 		2CC501502132556100535878 /* MyDogsTests */ = {
 			isa = PBXGroup;
 			children = (
-				2CC5EBE32134E5DB00EB1C02 /* DataManagementTests.swift */,
 				2CC5EBE52134F2C500EB1C02 /* Mocks.swift */,
+				2CC5EBE32134E5DB00EB1C02 /* DataManagementTests.swift */,
 				2CC501512132556100535878 /* DogDetailsViewControllerTests.swift */,
 				2CC501532132556100535878 /* Info.plist */,
 			);
@@ -194,9 +194,9 @@
 			children = (
 				2CC5013B2132555C00535878 /* MyDogsViewController.swift */,
 				2CC5013D2132555C00535878 /* MyDogs.storyboard */,
-				2CCB23972133C80100679E9F /* SampleProfilesViewController.swift */,
 				2CC5015E21325C8300535878 /* DogDetailsViewController.swift */,
 				2CC5016021325CB200535878 /* DogDetails.storyboard */,
+				2CCB23972133C80100679E9F /* SampleProfilesViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";

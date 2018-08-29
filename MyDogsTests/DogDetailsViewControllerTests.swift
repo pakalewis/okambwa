@@ -28,6 +28,7 @@ class DogDetailsViewControllerTests: XCTestCase {
     
     override func tearDown() {
         super.tearDown()
+//        dataStore.deleteAll()
     }
     
     func testCreateMode() {

@@ -12,7 +12,9 @@ class DataManagementTests: XCTestCase {
     
     override func tearDown() {
         super.tearDown()
+        dataStore.deleteAll()
     }
+    
     
     func testAllDogs() {
         XCTAssertEqual(dataStore.allDogsCount(type: .all), 0)

@@ -22,12 +22,14 @@ class DogDetailsViewController: UIViewController {
         print("-- Deinit DogDetailsViewController")
     }
     
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var tapRecevierView: UIView!
     @IBOutlet weak var addPhotoButton: UIButton!
     @IBOutlet weak var nameDatumView: DogDatumView!
     @IBOutlet weak var ownerDatumView: DogDatumView!
     @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var textViewHeightConstraint: NSLayoutConstraint!
     
     let PLACEHOLDER_TEXT = "Add a brief dog bio"
     var dogModel = DogModel()
@@ -38,6 +40,10 @@ class DogDetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillHide(_:)), name: .UIKeyboardWillHide, object:nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(keyboardWillChangeFrame(_:)), name: .UIKeyboardWillChangeFrame, object:nil)
+
         configureTextView()
         configureViews(forMode: self.mode)
         
@@ -45,43 +51,22 @@ class DogDetailsViewController: UIViewController {
         tapRecevierView.addGestureRecognizer(photoTap)
     }
     
-    @objc func viewFullImage() {
-        guard let image = imageView.image else { return }
-        
-        let container = UIView(frame: view.bounds)
-        container.alpha = 0.0
-        let tempImageView = UIImageView(frame: view.bounds)
-        tempImageView.backgroundColor = Colors._555555
-        tempImageView.contentMode = .scaleAspectFit
-        tempImageView.image = image
-        container.addSubview(tempImageView)
-        
-        let dismissPhotoTap = UITapGestureRecognizer(target: self, action: #selector(dismissFullImage))
-        container.addGestureRecognizer(dismissPhotoTap)
-
-        view.addSubview(container)
-        tempContainerView = container
-        
-        UIView.animate(withDuration: 0.2, animations: {
-            container.alpha = 1.0
-        })
-
-    }
-    
-    @objc func dismissFullImage() {
-        UIView.animate(withDuration: 0.2, animations: {
-            self.tempContainerView?.alpha = 0.0
-        }) { (done) in
-            self.tempContainerView?.removeFromSuperview()
-            self.tempContainerView = nil
-        }
-    }
-
     
     func configureTextView() {
         textView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         textView.delegate = self
+        
+        let toolBar = UIToolbar()
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = true
+        let space = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.done, target: self, action: #selector(dismissKeyboard))
+        
+        toolBar.setItems([space, doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        toolBar.sizeToFit()
+        textView.inputAccessoryView = toolBar
     }
     
     
@@ -156,7 +141,28 @@ class DogDetailsViewController: UIViewController {
         }        
     }
     
+    //|----------------------------------------------------------------------|\\
+    //|                            Keyboard handling                         |\\
+    //|----------------------------------------------------------------------|\\
+
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
     
+    @objc func keyboardWillHide(_ notification:Notification) {
+        scrollView.contentInset = UIEdgeInsets.zero
+    }
+    
+    @objc func keyboardWillChangeFrame(_ notification: Notification) {
+        guard let keyboardFrame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame.height, right: 0)
+    }
+
+    
+    //|----------------------------------------------------------------------|\\
+    //|                      Button and gesture handling                     |\\
+    //|----------------------------------------------------------------------|\\
+
     @objc func cancelOrDoneButtonTapped() {
         self.delegate?.close()
     }
@@ -171,6 +177,39 @@ class DogDetailsViewController: UIViewController {
     }
     
     
+    @objc func viewFullImage() {
+        guard let image = imageView.image else { return }
+        
+        let container = UIView(frame: view.bounds)
+        container.alpha = 0.0
+        let tempImageView = UIImageView(frame: view.bounds)
+        tempImageView.backgroundColor = Colors._555555
+        tempImageView.contentMode = .scaleAspectFit
+        tempImageView.image = image
+        container.addSubview(tempImageView)
+        
+        let dismissPhotoTap = UITapGestureRecognizer(target: self, action: #selector(dismissFullImage))
+        container.addGestureRecognizer(dismissPhotoTap)
+        
+        view.addSubview(container)
+        tempContainerView = container
+        
+        UIView.animate(withDuration: 0.2, animations: {
+            container.alpha = 1.0
+        })
+    }
+    
+    
+    @objc func dismissFullImage() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.tempContainerView?.alpha = 0.0
+        }) { (done) in
+            self.tempContainerView?.removeFromSuperview()
+            self.tempContainerView = nil
+        }
+    }
+    
+
     @IBAction func addPhotoButtonTapped() {
         switch PhotoManagement.checkStatus() {
             case .authorized:
@@ -193,6 +232,7 @@ class DogDetailsViewController: UIViewController {
         }
     }
     
+    
     func showPicker() {
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
@@ -201,6 +241,7 @@ class DogDetailsViewController: UIViewController {
         self.present(imagePickerController, animated: true, completion: nil)
     }
 }
+
 
 
 //|----------------------------------------------------------------------|\\
@@ -229,7 +270,13 @@ extension DogDetailsViewController: UITextViewDelegate {
         } else {
             textView.text = PLACEHOLDER_TEXT
         }
-
+        
+        let contentPlusBuffer = textView.contentSize.height + 50.0
+        if contentPlusBuffer > 100 {
+            textViewHeightConstraint.constant = contentPlusBuffer
+        } else {
+            textViewHeightConstraint.constant = 100
+        }
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
